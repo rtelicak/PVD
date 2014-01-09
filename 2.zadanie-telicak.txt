@@ -1,0 +1,32 @@
+SET SERVEROUTPUT ON;
+DECLARE
+  aRand number;
+  bRand number;
+  cRand number;
+  discr float;
+  x1 float;
+  x2 float;
+BEGIN
+  DELETE FROM T1;
+  FOR id IN
+  (
+    SELECT * FROM T2
+  )
+  LOOP
+  aRand := ROUND(DBMS_RANDOM.VALUE(id.amin,id.amax));
+  bRand := ROUND(DBMS_RANDOM.VALUE(id.bmin,id.bmax));
+  cRand := ROUND(DBMS_RANDOM.VALUE(id.cmin,id.cmax));
+  discr := (bRand*brand)-4*arand*crand;
+  
+  IF discr < 0 THEN
+   x1 := 0;
+   x2 := 0;
+  ELSE
+   x1 := ROUND((-brand+SQRT( discr ))/2*arand,2); 
+   x2 := ROUND((-brand-SQRT( discr ))/2*arand,2); 
+  END IF;
+    INSERT INTO T1 VALUES(arand,brand,crand,discr,SQRT( discr ),x1,x2);
+    DBMS_OUTPUT.PUT_LINE(arand|| ' ' ||brand|| ' ' ||crand|| ' ' ||discr|| ' ' ||x1|| ' ' ||x2);
+  END LOOP;
+  COMMIT;
+END;
